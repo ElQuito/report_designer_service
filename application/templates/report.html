@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container">
+	<div class="row">
+		<div class="col-xs-2">
+		</div>
+		<div class="col-xs-8">
+			<h3>{{report_name.name}}</h3>
+		</div>
+	</div>
+<form action="{{ url_for('report_result', id = id) }}"  method="get" name="report_form" id="report_form" onkeypress="return event.keyCode != 13;">
+	{% if field_sort == 'сортировка отсутствует' %}
+		{% for key, value in fields.items() %}
+		
+			{{value}} 
+			
+		{% endfor %}
+	{% else %}
+
+	    <!-- Если сортировка есть, то сортируем по ней  -->
+	    {% for sort in field_sort %}
+		
+        <!-- Сопоставляем id_field с идентификатором в сортировке -->
+		    {% for key, value in fields.items() if key == sort %}
+			
+			    {{value}} 
+
+		    {% endfor %}
+		
+	    {% endfor %}
+	{% endif %}
+	<br/>
+    <div class="row"><div class="col-xs-2"></div><div class="col-xs-3"><p><input class="btn btn-default btn-md" type="submit" value="Сформировать отчёт" onclick="disabled_input_hidden({{headers}});create_list_to_hidden({{headers}});"/></p></div></div>
+</form>
+</div>	
+{% endblock %}

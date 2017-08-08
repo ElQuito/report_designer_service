@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Административная панель</h2>
+		<form>
+            <input class="btn btn-default btn-md" type="button" value="Создать новый отчёт" onclick="showModalWin()">
+        </form>
+         
+        <!-- Наше модальное всплывающее окно -->
+        <div style="text-align: center" id="popupWin" class="modalwin">
+           
+            <form action="reports_admin"  method="post" name="report_new" id="report_new" class="form-horizontal">
+				<div class="form-group">
+					<label>Название отчёта</label><br/><input id="name" name="name" required/><br/>
+				</div>
+				<div class="form-group">
+					<label>HTML преобразование</label><br/><textarea rows="2" cols="45" id="html_xsl" name="html_xsl" ></textarea><br/>
+				</div>
+				<div class="form-group">
+					<label>EXCEL преобразование</label><br/><textarea rows="2" cols="45" id="excel_xsl" name="excel_xsl" ></textarea><br/>
+				</div>
+				<div class="form-group">
+					<label>WORD преобразование</label><br/><textarea rows="2" cols="45" id="word_xsl" name="word_xsl" ></textarea><br/>
+				</div>
+				<div class="form-group">
+					<label>Название хранимой процедуры</label><br/><input id="proc_name" name="proc_name" required/><br/>
+				</div>
+					<input class="btn btn-default" type="submit" value="Создать отчёт"/>
+            </form>
+        </div>
+		<br/><br/>
+	<div class="container-fluid">
+	{% for report in reports %}
+		
+		<div class="row">
+			<div class="col-xs-3"><p><a href="{{ url_for('report_update', id = report.id_reports) }}">{{report.name}}</a> </p></div>
+		
+			<form action="report_remove" method="post" name="report_remove" id="report_remove">
+			<input type="hidden" id="id_reports" name="id_reports" value="{{report.id_reports}}" />
+			<div class="col-xs-2">
+			<input type="image" onclick="return warnAboutRemoval()" src="/static/images/delete.gif" />
+			<br/><br/></div>
+			</form>
+		</div>
+	{% endfor %}
+	</div>
+{% endblock %}

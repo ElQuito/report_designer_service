@@ -1,0 +1,247 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container-fluid" style="border: 1px solid #C0C0C0;padding: 5px 5px 5px 5px;border-radius: 10px;background-color: #FCFCFC;" >
+<!-- Здесь выводим настройки отчёта -->
+<h2>Редактор отчёта</h2>
+   <div class="row">
+      <form action="{{ url_for('report_update', id = report_settings.id_reports) }}"  method="post" name="report_update" id="report_update">
+         <div class="col-xs-2"><label>Название отчёта</label><br/><input id="name" name="name" required value="{{report_settings.name}}"/></div>
+         <div class="col-xs-2"><label>HTML преобразование</label><br/><textarea rows="2" cols="20" id="html_xsl" name="html_xsl" >{{report_settings.html_xsl}}</textarea></div>
+         <div class="col-xs-2"><label>EXCEL преобразование</label><br/><textarea rows="2" cols="20" id="excel_xsl" name="excel_xsl" >{{report_settings.excel_xsl}}</textarea></div>
+         <div class="col-xs-2"><label>WORD преобразование</label><br/><textarea rows="2" cols="20" id="word_xsl" name="word_xsl" >{{report_settings.word_xsl}}</textarea></div>
+         <div class="col-xs-2"><label>Название хранимой процедуры</label><br/><input id="proc_name" name="proc_name" required value="{{report_settings.proc_name}}"/></div>
+         <div class="col-xs-2"><input class="btn btn-default btn-md"  name="form_update_settings" type="submit" value="Обновить отчёт"/></div>
+      </form>
+   </div>
+</div>
+<br/><br/>
+<!-- Этот блок для создания нового поля  -->
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-xs-2"><a OnClick="showDivElement('div_new_field');"><h4> Добавить новое поле </h4></a></div>
+	</div>
+   <div class="row" id="div_new_field" style="display:none">
+      
+      <form action="{{ url_for('report_update', id = report_settings.id_reports) }}"  method="post" name="new_field_report" id="new_field_report">
+         <input type="hidden" id="id_report" name="id_report" value="{{report_settings.id_reports}}" required />
+		 <div class="col-xs-2"><label>Название поля</label><br/><input id="label" name="label" required /></div>
+         <div class="col-xs-2">
+            <label>Тип поля</label><br/>
+            <select id="type" name="type">
+               <option value="date" selected>Дата</option>
+               <option value="subdivision">Подразделение</option>
+			   <option value="employees">Сотрудник</option>
+			   <option value="сompanies">Подразделение контрагента</option>
+			   <option value="partners_employees">Сотрудник контрагент</option>
+			   <option value="checkbox">Да/нет</option>
+			   <option value="radio">Переключатели</option>
+			   <option value="select">Список</option>
+			   <option value="ref_kinds_card_kinds">Виды карточек</option>
+			   <option value="ref_universal_item">Универсальный справочник</option>
+			   <option value="field_input">Поле</option>
+            </select>
+         </div>
+         <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" required /></div>
+         <div class="col-xs-2"><input class="btn btn-default btn-md" name="form_new_field" type="submit" value="Добавить поле"/></div>
+      </form>
+   </div>
+</div>
+<br/><br/>
+
+<!-- Этот блок для редактирования полей  -->
+<div class="container-fluid" >
+{% if report_fields[0] %} 
+      <h4> Редактировать поля </h4>
+{% endif %}
+
+<div id="sortable" class="connectedSortable">
+
+<!-- Если сортировка отсутствует то сортируем по id_field  -->
+{% if field_sort == 'сортировка отсутствует' %}
+
+<!-- В цикле выводим все поля  -->
+  {% for report_field in report_fields %}
+   <div id="{{report_field.id_field}}" style="border: 1px solid #C0C0C0;padding: 5px 5px 5px 5px;border-radius: 10px;background-color: #FCFCFC;" class="draggableDivs">
+   <div class="row" >
+      <form action="{{ url_for('report_update', id = report_settings.id_reports) }}"  method="post" name="update_field_report" id="update_field_report">
+         <input type="hidden" id="id_field_update" name="id_field_update" value="{{report_field.id_field}}" required />
+         <div class="col-xs-2"><label>Название поля</label><br/><input id="label" name="label" value="{{report_field.label}}" required /></div>
+         <div class="col-xs-2"><label>Тип поля</label><br/>
+		 <select id="type" name="type" >
+            <option value="date" {% if report_field.type == 'date' %}selected{% endif %}>Дата</option>
+            <option value="subdivision" {% if report_field.type == 'subdivision' %}selected{% endif %}>Подразделение</option>
+			<option value="employees" {% if report_field.type == 'employees' %}selected{% endif %}>Сотрудник</option>
+			<option value="сompanies" {% if report_field.type == 'сompanies' %}selected{% endif %}>Подразделение контрагента</option>
+			<option value="partners_employees" {% if report_field.type == 'partners_employees' %}selected{% endif %}>Сотрудник контрагент</option>
+			<option value="checkbox" {% if report_field.type == 'checkbox' %}selected{% endif %}>Да/нет</option>
+			<option value="radio" {% if report_field.type == 'radio' %}selected{% endif %}>Переключатели</option>
+			<option value="select" {% if report_field.type == 'select' %}selected{% endif %}>Список</option>
+			<option value="ref_kinds_card_kinds" {% if report_field.type == 'ref_kinds_card_kinds' %}selected{% endif %}>Виды карточек</option>
+			<option value="ref_universal_item" {% if report_field.type == 'ref_universal_item' %}selected{% endif %}>Универсальный справочник</option>
+			<option value="field_input" {% if report_field.type == 'field_input' %}selected{% endif %}>Поле</option>
+            </select>
+         </div>
+         <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" value="{{report_field.name}}" required /></div>
+         <div class="col-xs-1"><input class="btn btn-default btn-md" name="form_update_field" type="submit" value="Обновить поле" style="margin-top:20px;"/></div>
+      </form>
+      <form action="{{ url_for('field_remove', id = report_settings.id_reports) }}" method="post" name="field_remove" id="field_remove">
+         <input type="hidden" id="id_field" name="id_field" value="{{report_field.id_field}}" />
+         <div class="col-xs-1" align="right">
+			<input type="image" onclick="return warnAboutRemovalField()" src="/static/images/delete.gif" style="margin-top:23px;"/>
+         </div>
+      </form>
+   </div>
+   
+	<!-- Проверяем тип с коллекцией  -->
+   {% if report_field.type == 'radio' or report_field.type == 'select' %}
+   <div class="row">
+		<div class="col-xs-2"><h5> Добавить коллекцию </h5></div>
+   </div>
+   <div class="row" >
+    <form action="{{ url_for('report_update', id = report_settings.id_reports) }}" method="post" name="field_collection_add" id="field_collection_add">
+	<input type="hidden" id="id_field" name="id_field" value="{{report_field.id_field}}" />
+	<div class="col-xs-2"><input type="text" id="field_collection_value" name="field_collection_value" required placeholder="Введите значение"/></div>
+	<div class="col-xs-2"><input type="text" id="field_collection_label" name="field_collection_label" required placeholder="Введите описание"/></div>	
+	<div class="col-xs-1"><input class="btn btn-default btn-xs" name="field_collection_add" type="submit" value="Добавить коллекцию" /></div>
+	</form>
+   </div>
+   <div class="row">
+				<div class="col-xs-2"><h5> Обновить коллекцию </h5></div>
+		   </div>
+		<!-- В цикле выводим коллекцию  --><!-- Сопоставляем коллекцию с id_field  -->
+	   {% for collection in field_collection if collection.id_field == report_field.id_field %}
+	   
+			
+		   
+		      
+			<div class="row" style="margin-top:2px;" >
+			<form action="{{ url_for('report_update', id = report_settings.id_reports) }}" method="post" name="field_collection_update" id="field_collection_update" >
+			<input type="hidden" id="id_field_collection" name="id_field_collection" value="{{collection.id_field_collection}}" />
+			<div class="col-xs-2"><input type="text" id="field_collection_value" name="field_collection_value" value="{{collection.value}}" required placeholder="Введите значение"/></div>
+			<div class="col-xs-2"><input type="text" id="field_collection_label" name="field_collection_label" value="{{collection.label}}" required placeholder="Введите описание"/></div>	
+			<div class="col-xs-1"><input class="btn btn-default btn-xs" name="field_collection_update" type="submit" value="Обновить коллекцию" /></div>
+			</form>
+					       <form action="{{ url_for('collection_remove', id = report_settings.id_reports) }}" method="post" name="field_remove" id="field_remove">
+				 <input type="hidden" id="id_field_collection" name="id_field_collection" value="{{collection.id_field_collection}}" />
+				 <div class="col-xs-1" align="right">
+					<input type="image" onclick="return warnAboutRemovalField()" src="/static/images/delete.gif" />
+				 </div>
+			  </form>
+		   </div>
+
+	   {% endfor %}
+	  
+   {% endif %}
+   </div>
+   {% endfor %}
+{% else %}
+
+ <!-- Если сортировка есть, то сортируем по ней  -->
+{% for sort in field_sort %}
+
+	<!-- Выводим в цикле поля  --><!-- Сопоставляем id_field с идентификатором в сортировке -->
+   {% for report_field in report_fields if report_field.id_field == sort %}
+   
+  
+	
+   
+   <div id="{{report_field.id_field}}" style="border: 1px solid #C0C0C0;padding: 5px 5px 5px 5px;border-radius: 10px;background-color: #FCFCFC;" class="draggableDivs">
+   <div class="row" >
+      <form action="{{ url_for('report_update', id = report_settings.id_reports) }}"  method="post" name="update_field_report" id="update_field_report">
+         <input type="hidden" id="id_field_update" name="id_field_update" value="{{report_field.id_field}}" required />
+         <div class="col-xs-2"><label>Название поля</label><br/><input id="label" name="label" value="{{report_field.label}}" required /></div>
+         <div class="col-xs-2"><label>Тип поля</label><br/>
+		 <select id="type" name="type" >
+            <option value="date" {% if report_field.type == 'date' %}selected{% endif %}>Дата</option>
+            <option value="subdivision" {% if report_field.type == 'subdivision' %}selected{% endif %}>Подразделение</option>
+			<option value="employees" {% if report_field.type == 'employees' %}selected{% endif %}>Сотрудник</option>
+			<option value="сompanies" {% if report_field.type == 'сompanies' %}selected{% endif %}>Подразделение контрагента</option>
+			<option value="partners_employees" {% if report_field.type == 'partners_employees' %}selected{% endif %}>Сотрудник контрагент</option>
+			<option value="checkbox" {% if report_field.type == 'checkbox' %}selected{% endif %}>Да/нет</option>
+			<option value="radio" {% if report_field.type == 'radio' %}selected{% endif %}>Переключатели</option>
+			<option value="select" {% if report_field.type == 'select' %}selected{% endif %}>Список</option>
+			<option value="ref_kinds_card_kinds" {% if report_field.type == 'ref_kinds_card_kinds' %}selected{% endif %}>Виды карточек</option>
+			<option value="ref_universal_item" {% if report_field.type == 'ref_universal_item' %}selected{% endif %}>Универсальный справочник</option>
+			<option value="field_input" {% if report_field.type == 'field_input' %}selected{% endif %}>Поле</option>
+            </select>
+         </div>
+		 <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" value="{{report_field.name}}" required /></div>
+         
+         <div class="col-xs-1"><input class="btn btn-default btn-md" name="form_update_field" type="submit" value="Обновить поле" style="margin-top:20px;"/></div>
+      </form>
+      <form action="{{ url_for('field_remove', id = report_settings.id_reports) }}" method="post" name="field_remove" id="field_remove">
+         <input type="hidden" id="id_field" name="id_field" value="{{report_field.id_field}}" />
+         <div class="col-xs-1" align="right">
+			<input type="image" onclick="return warnAboutRemovalField()" src="/static/images/delete.gif" style="margin-top:23px;"/>
+         </div>
+      </form>
+   </div>
+   	<!-- Проверяем тип с коллекцией  -->
+   {% if report_field.type == 'radio' or report_field.type == 'select' %}
+   <div class="row">
+		<div class="col-xs-2"><h5> Добавить коллекцию </h5></div>
+   </div>
+   <div class="row" >
+    <form action="{{ url_for('report_update', id = report_settings.id_reports) }}" method="post" name="field_collection_add" id="field_collection_add">
+	<input type="hidden" id="id_field" name="id_field" value="{{report_field.id_field}}" />
+	<div class="col-xs-2"><input type="text" id="field_collection_value" name="field_collection_value" required placeholder="Введите значение"/></div>
+	<div class="col-xs-2"><input type="text" id="field_collection_label" name="field_collection_label" required placeholder="Введите описание"/></div>	
+	<div class="col-xs-1"><input class="btn btn-default btn-xs" name="field_collection_add" type="submit" value="Добавить коллекцию" /></div>
+	</form>
+   </div>
+   <div class="row">
+				<div class="col-xs-2"><h5> Обновить коллекцию </h5></div>
+		   </div>
+		<!-- В цикле выводим коллекцию  --><!-- Сопоставляем коллекцию с id_field  -->
+	   {% for collection in field_collection if collection.id_field == report_field.id_field %}
+			
+		  
+		      
+			<div class="row" style="margin-top:2px;" >
+			<form action="{{ url_for('report_update', id = report_settings.id_reports) }}" method="post" name="field_collection_update" id="field_collection_update" >
+			<input type="hidden" id="id_field_collection" name="id_field_collection" value="{{collection.id_field_collection}}" />
+			<div class="col-xs-2"><input type="text" id="field_collection_value" name="field_collection_value" value="{{collection.value}}" required placeholder="Введите значение"/></div>
+			<div class="col-xs-2"><input type="text" id="field_collection_label" name="field_collection_label" value="{{collection.label}}" required placeholder="Введите описание"/></div>	
+			<div class="col-xs-1"><input class="btn btn-default btn-xs" name="field_collection_update" type="submit" value="Обновить коллекцию" /></div>
+			</form>
+					       <form action="{{ url_for('collection_remove', id = report_settings.id_reports) }}" method="post" name="field_remove" id="field_remove">
+				 <input type="hidden" id="id_field_collection" name="id_field_collection" value="{{collection.id_field_collection}}" />
+				 <div class="col-xs-1" align="right">
+					<input type="image" onclick="return warnAboutRemovalField()" src="/static/images/delete.gif" />
+				 </div>
+			  </form>
+		   </div>
+
+		   
+	   {% endfor %}
+	  
+   {% endif %}
+   </div>
+   
+   
+   {% endfor %}
+   
+
+    {% endfor %}
+	{% endif %}
+   </div>
+   
+   
+</div>
+ <script type="text/javascript">
+ //функция drag and drop и вызов ajax для обновления сортировки
+  $("#sortable").sortable({
+    connectWith: ".connectedSortable",
+    stop: function(event, div) {
+        $('.connectedSortable').each(function() {
+            result = $(this).sortable("toArray");
+			$.ajax({
+			  method: "POST",
+			  url: "../../field_sort",
+			  data: { report_id: {{ report_settings.id_reports }} ,field_sort : result.toString() }
+			});
+        });
+    }
+});
+  </script>
+{% endblock %}
