@@ -33,4 +33,7 @@ class CreateFields():
 			# поле поле
 			if row.type == 'field_input':
 				fields.update({row.id_field:Markup('<div class="row"><div class="col-xs-2"  align="right"><label>' + row.label + '</label></div><div class="col-xs-2"><input type="text" id="' + row.name + '" name="' + row.name + '" /></div></div>')})
+							# поле поле
+			if row.type == 'employee_remote_id':
+				fields.update({row.id_field:Markup('<div class="row"><div class="col-xs-2"  align="right"></div><div class="col-xs-2"><input type="hidden" id="' + row.name + '" name="' + row.name + '" value="employee_remote_id" /></div></div>')})
 		return (headers,fields)	

@@ -31,15 +31,17 @@
     {% else %}
     <title>Report</title>
     {% endif %}
+	<style>
+   body {
+	   background: url(/static/images/bg_image.jpg) no-repeat center center fixed;
+       -webkit-background-size: cover;
+       -moz-background-size: cover;
+       -o-background-size: cover;
+       background-size: cover;
+   }
+  </style>
   </head>
   <body>
-    <nav class="navbar navbar-default">
-		<div class="container-fluid">
-		  <div class="navbar-header" style="background: url(/static/images/logo-without-text-brown.svg) no-repeat left;">
-			<a href="#" class="navbar-brand" style="margin-left: 30px;">Мин пром торг</a>
-		  </div>
-		</div>
-   </nav>
 	<div class="container-fluid">
     {% block content %}
 <div class="container">

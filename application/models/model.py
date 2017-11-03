@@ -1,4 +1,5 @@
 import pyodbc
+import os
 from application import connect_db,connect_db_lite 
 from application.lib.ConvertToXml import ConvertToXml
 import lxml.etree as ET
@@ -15,7 +16,13 @@ class Report():
 		#формируем строку вызова процедуры
 		proc_string = ''
 		for row in row_fields:
-			proc_string = proc_string + "@" + str(row.name) + " = '" + str(request.args.get(row.name)) + "' "
+			#проверяем на идентификатор пользователя
+			if str(request.args.get(row.name)) == 'employee_remote_id':
+				value_name = str(request.environ.get('REMOTE_USER'))
+			else:
+				value_name = str(request.args.get(row.name))
+			
+			proc_string = proc_string + "@" + str(row.name) + " = '" + value_name + "' "
 			#проверяем что это последний элемент и не добавляем запятую
 			if len(row_fields) != row_fields.index(row) + 1:
 				proc_string = proc_string + ", "

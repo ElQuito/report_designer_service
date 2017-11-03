@@ -2,7 +2,11 @@
 {% block content %}
 <div class="container-fluid">
 	<div class="row">
-
+        <div class="col-sm-1" id="div_content_back" style="margin-right:59px;">
+		<form >
+			<input class="btn btn-default btn-sm" type="submit" value="Задать новые параметры" onclick="history.back()"/>
+			</form>
+		</div>
 		<div class="col-sm-1" id="div_content_excel" >
 			<form action="{{ url_for('upload_excel') }}"  method="post" name="download_form_excel" id="download_form_excel">
 			<input type="hidden" id="content_excel" name="content_excel" value="{{excel_content}}"  />

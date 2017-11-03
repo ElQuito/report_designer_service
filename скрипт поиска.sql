@@ -66,4 +66,4 @@ begin
 		where RefUniversal_Item.Name like '%' + @searchTerm +'%';
 
 	end;
-go
+end;

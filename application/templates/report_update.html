@@ -39,6 +39,7 @@
 			   <option value="ref_kinds_card_kinds">Виды карточек</option>
 			   <option value="ref_universal_item">Универсальный справочник</option>
 			   <option value="field_input">Поле</option>
+			   <option value="employee_remote_id">Текущий пользователь (скрытая)</option>
             </select>
          </div>
          <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" required /></div>
@@ -79,6 +80,7 @@
 			<option value="ref_kinds_card_kinds" {% if report_field.type == 'ref_kinds_card_kinds' %}selected{% endif %}>Виды карточек</option>
 			<option value="ref_universal_item" {% if report_field.type == 'ref_universal_item' %}selected{% endif %}>Универсальный справочник</option>
 			<option value="field_input" {% if report_field.type == 'field_input' %}selected{% endif %}>Поле</option>
+			<option value="employee_remote_id" {% if report_field.type == 'employee_remote_id' %}selected{% endif %}>Текущий пользователь (скрытая)</option>
             </select>
          </div>
          <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" value="{{report_field.name}}" required /></div>
@@ -163,6 +165,7 @@
 			<option value="ref_kinds_card_kinds" {% if report_field.type == 'ref_kinds_card_kinds' %}selected{% endif %}>Виды карточек</option>
 			<option value="ref_universal_item" {% if report_field.type == 'ref_universal_item' %}selected{% endif %}>Универсальный справочник</option>
 			<option value="field_input" {% if report_field.type == 'field_input' %}selected{% endif %}>Поле</option>
+			<option value="employee_remote_id" {% if report_field.type == 'employee_remote_id' %}selected{% endif %}>Текущий пользователь (скрытая)</option>
             </select>
          </div>
 		 <div class="col-xs-2"><label>Идентификатор поля</label><br/><input id="name" name="name" value="{{report_field.name}}" required /></div>
